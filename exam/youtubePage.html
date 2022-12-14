@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" type="type/css" href="./reset.css">
+    <link rel="stylesheet" type="type/css" href="./style.css"> 
+    <script src="https://apis.google.com/js/api.js"></script>
+</head>
+<script>
+  /**
+   * Sample JavaScript code for youtube.videos.list
+   * See instructions for running APIs Explorer code samples locally:
+   * https://developers.google.com/explorer-help/code-samples#javascript
+   */
+
+  function authenticate() {
+    return gapi.auth2.getAuthInstance()
+        .signIn({scope: "https://www.googleapis.com/auth/youtube.readonly"})
+        .then(function() { console.log("Sign-in successful"); },
+              function(err) { console.error("Error signing in", err); });
+  }
+  function loadClient() {
+    gapi.client.setApiKey("AIzaSyCGXkG4E6QYN3CKoS1jKfFE69WwwJgBDAE");
+    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+        .then(function() { console.log("GAPI client loaded for API"); },
+              function(err) { console.error("Error loading GAPI client for API", err); });
+  }
+  // Make sure the client is loaded and sign-in is complete before calling this method.
+  function execute(item) {
+    return gapi.client.youtube.videos.list({
+      "part": [
+        "snippet,contentDetails,statistics"
+      ],
+      "id": [
+        "Ks-_Mh1QhMc"
+      ]
+    })
+        .then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                console.log("Response", response);
+              },
+              function(err) { console.error("Execute error", err); });
+  }
+  gapi.load("client:auth2", function() {
+    gapi.auth2.init({client_id: "1094416849219-b91nn76bga0d60vqcqq6eudi2nti7kb6.apps.googleusercontent.com"});
+  });
+</script>
+
+<body>
+    <section class="main">
+        <div class="search-bar">
+            <input type="text" id="search-field" class="search-bar"/>
+            <button id="search-btn">SEARCH</button>
+        </div>
+    </section>
+
+<button onclick="authenticate().then(loadClient)">authorize and load</button>
+<button onclick="execute(document.getElementById('search-field').value)">execute</button>
+</body>
+</html>
+
